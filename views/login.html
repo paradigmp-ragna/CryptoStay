@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Login</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #211f17;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    #login-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .class1 {
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="login-container">
+
+    <form id="loginForm">
+      <label for="username" class="class1">Login Id:</label>
+      <input type="text" id="username" name="username" placeholder="enter your name" required>
+
+      <label for="password" class="class1">Password:</label>
+      <input type="password" id="password" name="password" placeholder="enter your password" required>
+
+       <a href="http://localhost:3003/?addressBalance=0"><button type="button" onclick="submitLoginForm()">Login</button></a>
+    </form>
+
+    <script>
+      async function submitLoginForm() {
+        const form = document.getElementById("loginForm");
+        const formData = new FormData(form);
+
+        const response = await fetch('http://localhost:3002/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(formData),
+          redirect: 'follow',
+        });
+
+        if (response.ok) {
+          // Redirect to the home page or any other endpoint after successful login
+          window.location.href = '/';
+        } else {
+          const errorMessage = await response.text();
+          alert(`Login failed: ${errorMessage}`);
+        }
+      }
+    </script>
+
+</body>
+
+</html>

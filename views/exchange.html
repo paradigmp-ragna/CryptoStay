@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Form</title>
+  <style>
+    body {
+      background-color: black;
+      color: #fff;
+      background-size: cover;
+      /* Ensures the background image covers the entire viewport */
+      background-position: center;
+      background-attachment: fixed;
+      /* Makes the background image fixed */
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      background-color: #2d2b24;
+      /* Slightly lighter background color for the form */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border: 1px solid #47453f;
+      /* Darker border color */
+      border-radius: 4px;
+      background-color: #3a3932;
+      /* Input field background color */
+      color: #fff;
+      /* Text color inside input field */
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #e0cda1;
+      /* Accent color */
+      color: #211f17;
+      /* Text color on the button */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #c4b38d;
+      /* Darker accent color on hover */
+    }
+
+    .transaction-container,
+    .contract-container {
+      margin-bottom: 10px;
+      display: none;
+      /* Hide initially */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="exchange-info">
+      <h2>Exchange Information</h2>
+      <p id="available-coins">Available Coins: Loading...</p>
+      <p id="conversion-rate">Conversion Rate: Loading...</p>
+    </div>
+
+    <div id="buy-coins">
+      <h2>Buy Coins</h2>
+      <label for="money">Enter Money (in Rupees): </label>
+      <input type="text" id="money" />
+      <button onclick="computeCoins()">Compute Coins</button>
+      <p id="computed-coins">Coins: </p>
+      <a href="http://localhost:3003/?addressBalance=0"><button onclick="pay()">Pay</button></a>
+    </div>
+  </div>
+  <script>
+    // Fetch exchange information on page load
+    fetch('http://localhost:3000/exchange')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('available-coins').innerText = `Available Coins: ${data.availableCoins}`;
+        document.getElementById('conversion-rate').innerText = `Conversion Rate: ${data.conversionRate} Rupees to 1 Swarm`;
+      })
+      .catch(error => console.error('Error fetching exchange information:', error));
+
+    // Function to compute coins based on the entered money
+    function computeCoins() {
+      const moneyInput = document.getElementById('money');
+      const computedCoins = document.getElementById('computed-coins');
+
+      const money = parseFloat(moneyInput.value);
+
+      if (!isNaN(money) && money > 0) {
+        fetch(`http://localhost:3000/exchange`)
+          .then(response => response.json())
+          .then(data => {
+            const conversionRate = data.conversionRate;
+            const coins = Math.floor(money / conversionRate);
+            computedCoins.innerText = `Coins: ${coins}`;
+          })
+          .catch(error => console.error('Error computing coins:', error));
+      } else {
+        computedCoins.innerText = 'Invalid amount entered.';
+      }
+    }
+
+    // Function to simulate the payment
+    function pay() {
+      const computedCoins = document.getElementById('computed-coins').innerText;
+
+      // Example: Add your logic to process the payment
+      const amount = parseFloat(computedCoins.split(': ')[1].trim());
+      const sender = 'EXCHANGE';
+
+      // Prepare data for the transaction
+      const transactionData = {
+        amount,
+        sender
+      };
+
+      fetch('http://localhost:3002/updatetransactionandholding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transactionData)
+      })
+        .then(response => response.json())
+        .then(updateData => {
+          // Display a success message for the update
+          alert(`Transaction update successful! Update details: ${JSON.stringify(updateData)}`);
+        })
+        .catch(error => console.error('Error updating transaction:', error));
+    }
+  </script>
+
+</body>
+
+</html>

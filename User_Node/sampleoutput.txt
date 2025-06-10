@@ -1,0 +1,50 @@
+{
+  username: 'ujwal',
+  email: 'ujwalkcsps@gmail.com',
+  password: 'ujwal',
+  name: 'UJWAL KC',
+  phone: '+918660511414',
+  address: '#378, skanda, 1st block, 18th cross, narayananagar, doddakallasandra'
+}
+
+
+HotelBookingUser {
+  username: 'john_doe',
+  email: 'john@example.com',
+  password: 'hashed_password',
+  name: 'John Doe',
+  phone: '+1234567890',
+  address: '123 Main St',
+  transactions: [
+    Transaction {
+      sender: 'sender1',
+      receiver: 'receiver1',
+      amount: 1000,
+      transactionFees: 20
+    },
+    Transaction {
+      sender: 'sender2',
+      receiver: 'receiver2',
+      amount: 1500,
+      transactionFees: 30
+    }
+  ],
+  contracts: [
+    Contract {
+      hotelName: 'Hotel A',
+      roomType: 'Single',
+      roomsBooked: 2,
+      services: [Array],
+      totalCost: 300,
+      refundRatio: 0.8
+    },
+    Contract {
+      hotelName: 'Hotel B',
+      roomType: 'Double',
+      roomsBooked: 1,
+      services: [Array],
+      totalCost: 250,
+      refundRatio: 0.9
+    }
+  ]
+}
