@@ -1,0 +1,23 @@
+{
+    "hotelName": "Awesome Hotel",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "zipCode": "12345",
+    "email": "hotel@example.com",
+    "phone": "+1234567890",
+    "roomTypes": [
+      {"type": "Single", "capacity": 1, "costPerNight": 100},
+      {"type": "Double", "capacity": 2, "costPerNight": 150}
+    ],
+    "services": [
+      {"name": "WiFi", "description": "High-speed internet", "cost": 10},
+      {"name": "Parking", "description": "Secure parking space", "cost": 15}
+    ],
+    "amenities": "Swimming pool, Gym, Spa",
+    "checkInTime": "2:00 PM",
+    "checkOutTime": "12:00 PM",
+    "cancellationPolicy": "Flexible cancellation policy",
+    "images": ["image1.jpg", "image2.png", "image3.jpg"]
+  }
+  

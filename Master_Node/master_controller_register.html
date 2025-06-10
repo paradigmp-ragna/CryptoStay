@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Form</title>
+  <style>
+    body {
+      background-color: black;
+      color: #fff;
+      background-size: cover;
+      /* Ensures the background image covers the entire viewport */
+      background-position: center;
+      background-attachment: fixed;
+      /* Makes the background image fixed */
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      background-color: #2d2b24;
+      /* Slightly lighter background color for the form */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border: 1px solid #47453f;
+      /* Darker border color */
+      border-radius: 4px;
+      background-color: #3a3932;
+      /* Input field background color */
+      color: #fff;
+      /* Text color inside input field */
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #e0cda1;
+      /* Accent color */
+      color: #211f17;
+      /* Text color on the button */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #c4b38d;
+      /* Darker accent color on hover */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <form id="hotelRegistrationForm">
+      <label for="hotelName">Hotel Name:</label>
+      <input type="text" id="hotelName" name="hotelName" required><br>
+
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" required><br>
+
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state" required><br>
+
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country" required><br>
+
+      <label for="zipCode">Zip Code:</label>
+      <input type="text" id="zipCode" name="zipCode" required><br>
+
+      <label for="email">Contact Email:</label>
+      <input type="email" id="email" name="email" required><br>
+
+      <label for="phone">Contact Phone:</label>
+      <input type="tel" id="phone" name="phone" required><br>
+
+      <div id="roomTypesContainer" class="dynamic-inputs">
+        <label>Room Types:</label>
+        <div class="roomType">
+          <label for="type1">Type:</label>
+          <input type="text" id="type1" name="roomTypes[0][type]" required><br>
+
+          <label for="capacity1">Capacity:</label>
+          <input type="number" id="capacity1" name="roomTypes[0][capacity]" required><br>
+
+          <label for="costPerNight1">Cost Per Night:</label>
+          <input type="number" id="costPerNight1" name="roomTypes[0][costPerNight]" required><br>
+        </div>
+        <button type="button" onclick="addRoomType()">Add Room Type</button><br>
+      </div>
+
+      <div id="servicesContainer" class="dynamic-inputs">
+        <label>Services:</label>
+        <div class="service">
+          <label for="serviceName1">Name:</label>
+          <input type="text" id="serviceName1" name="services[0][name]" required><br>
+
+          <label for="serviceDescription1">Description:</label>
+          <input type="text" id="serviceDescription1" name="services[0][description]" required><br>
+
+          <label for="serviceCost1">Cost:</label>
+          <input type="number" id="serviceCost1" name="services[0][cost]" required><br>
+        </div>
+        <button type="button" onclick="addService()">Add Service</button>
+      </div>
+
+      <!-- Hidden input fields for counts -->
+      <input type="hidden" id="roomTypeCount" name="roomTypeCount" value="1"><br>
+      <input type="hidden" id="serviceCount" name="serviceCount" value="1"><br>
+
+      <label for="amenities">Amenities (comma-separated):</label>
+      <input type="text" id="amenities" name="amenities"><br>
+
+      <label for="checkInTime">Check-in Time:</label>
+      <input type="text" id="checkInTime" name="checkInTime"><br>
+
+      <label for="checkOutTime">Check-out Time:</label>
+      <input type="text" id="checkOutTime" name="checkOutTime"><br>
+
+      <label for="cancellationPolicy">Cancellation Policy:</label>
+      <input type="text" id="cancellationPolicy" name="cancellationPolicy"><br>
+
+      <label for="add images">Image URLs:</label>
+      <input type="url" id="images" name="images"><br>
+
+
+      <a href="http://localhost:3003/?addressBalance=0"><button type="button" onclick="submitForm()">Submit</button></a>
+    </form>
+  </div>
+
+  <script>
+    function changePage() {
+      // Change the page URL upon button click
+      window.location.href = 'master_controller_home.html';
+    }
+    let roomTypeCount = 1;
+    let serviceCount = 1;
+
+    function addRoomType() {
+      roomTypeCount++;
+
+      const roomTypeContainer = document.getElementById('roomTypesContainer');
+      const newRoomTypeDiv = document.createElement('div');
+      newRoomTypeDiv.className = 'roomType';
+
+      newRoomTypeDiv.innerHTML = `
+        <label for="type${roomTypeCount}">Type:</label>
+        <input type="text" id="type${roomTypeCount}" name="roomTypes[${roomTypeCount - 1}][type]" required>
+
+        <label for="capacity${roomTypeCount}">Capacity:</label>
+        <input type="number" id="capacity${roomTypeCount}" name="roomTypes[${roomTypeCount - 1}][capacity]" required>
+
+        <label for="costPerNight${roomTypeCount}">Cost Per Night:</label>
+        <input type="number" id="costPerNight${roomTypeCount}" name="roomTypes[${roomTypeCount - 1}][costPerNight]" required>
+      `;
+
+      roomTypeContainer.appendChild(newRoomTypeDiv);
+      document.getElementById('roomTypeCount').value = roomTypeCount;
+    }
+
+    function addService() {
+      serviceCount++;
+
+      const servicesContainer = document.getElementById('servicesContainer');
+      const newServiceDiv = document.createElement('div');
+      newServiceDiv.className = 'service';
+
+      newServiceDiv.innerHTML = `
+        <label for="serviceName${serviceCount}">Name:</label>
+        <input type="text" id="serviceName${serviceCount}" name="services[${serviceCount - 1}][name]" required>
+
+        <label for="serviceDescription${serviceCount}">Description:</label>
+        <input type="text" id="serviceDescription${serviceCount}" name="services[${serviceCount - 1}][description]" required>
+
+        <label for="serviceCost${serviceCount}">Cost:</label>
+        <input type="number" id="serviceCost${serviceCount}" name="services[${serviceCount - 1}][cost]" required>
+      `;
+
+      servicesContainer.appendChild(newServiceDiv);
+      document.getElementById('serviceCount').value = serviceCount;
+    }
+
+    async function submitForm() {
+      const form = document.getElementById("hotelRegistrationForm");
+      const formData = new FormData(form);
+
+      // Extract image URLs
+      const imageUrls = formData.getAll('images');
+      displayImages(imageUrls);
+
+      // Remove the image URLs from the form data
+      formData.delete('images');
+
+      // Convert FormData to JSON (excluding images)
+      const jsonData = {};
+      formData.forEach((value, key) => {
+        jsonData[key] = value;
+      });
+
+      console.log('JSON Data:', jsonData);
+
+      // Send JSON data to the Master Node backend
+      // const response = await fetch('http://master-node-container:3000/hotelRegistration', {
+      const response = await fetch('http://localhost:3000/hotelRegistration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    }
+
+    function displayImages(imageUrls) {
+      // Assuming you have an element with the ID "imageContainer" to display images
+      const imageContainer = document.getElementById('imageContainer');
+
+      // Clear previous images
+      imageContainer.innerHTML = '';
+
+      // Display each image in a new <img> element
+      imageUrls.forEach((imageUrl, index) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = imageUrl;
+        imgElement.alt = `Image ${index + 1}`;
+        imgElement.style.width = '100%';
+        imgElement.style.marginTop = '10px';
+
+        // Append the image element to the container
+        imageContainer.appendChild(imgElement);
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>
